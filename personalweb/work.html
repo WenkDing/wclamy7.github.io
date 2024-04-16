@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>作品</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+		<style>
+			body {
+				background-color: white;
+			}
+
+			/* 导航栏 */
+			.nav-link {
+				color: white;
+				font-weight: normal;
+				text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+				font-size: 25px;
+			}
+
+			/* 导航栏的悬停 */
+			.nav-link:hover {
+				color: aquamarine;
+			}
+
+
+			/* 扑克牌具体的大小 */
+			.poker {
+				position: absolute;
+				width: 20rem;
+				height: 26rem;
+				border: 0.15rem solid #fff;
+				border-radius: 1.5rem;
+				background-color: to right, rgb(31, 210, 254), rgb(25, 245, 200));
+				overflow: hidden;
+				transition: background-color 1s ease;
+			}
+
+			/* 扑克牌全里面的画面全屏 */
+			.poker img {
+				position: relative;
+				background-color: aqua;
+				width: 100%;
+			}
+
+
+			/* 最顶上那张转动的牌的设置 */
+			.poker-top {
+				position: absolute;
+				width: 80rem;
+				/* 与卡牌宽度保持一致 */
+				height: 37rem;
+				/* 与卡牌高度保持一致 */
+				right: 0;
+				/* 将按钮放置在容器的最右边 */
+				cursor: pointer;
+				z-index: 1000;
+				/* 			  background-color: aqua; */
+				top: 10rem;
+			}
+
+
+
+
+			.poker-container {
+				top: 200px;
+				position: relative;
+				width: 50rem;
+				/* 修改容器宽度 */
+				height: 30rem;
+				/* 修改容器高度 */
+				/*    border-color: aqua; */
+				/* 设置边框颜色 */
+				border-width: 2px;
+				/* 设置边框宽度 */
+				/*    border-style: solid; */
+				/* 设置边框样式 */
+			}
+
+
+			.poker1 {
+				transform: rotate(-10deg);
+			}
+
+			.poker2 {
+				transform: rotate(-6deg) translate(35%, -12%);
+			}
+
+			.poker3 {
+				transform: rotate(-2deg) translate(65%, -19%);
+			}
+
+			.poker4 {
+				transform: rotate(2deg) translate(95%, -26%);
+			}
+
+			.poker5 {
+				transform: rotate(6deg) translate(125%, -23%);
+			}
+
+			.poker6 {
+				transform: rotate(10deg) translate(155%, -19%);
+			}
+
+
+			.text-center {
+				position: relative;
+				top: -200px;
+				/* 按钮向上移动的距离 */
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<!-- 导航栏 -->
+		<nav class="navbar bg-body-tertiary navbar-expand-lg"
+			style="background-image: linear-gradient(to right, rgb(31,210,254), rgb(25,245,200));">
+
+			<div class="container-fluid d-flex justify-content-between align-items-center" style="width: 240%;">
+				<a class="navbar-brand" href="index.html" style="font-size: 2em; color: white; font-weight: normal; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+					<img src="image/cyberlogo.png" width="60" height="50" class="d-inline-block align-text-top">
+					点击卡牌转动播放我的作品（点击下方按钮查看更多）
+				</a>
+				<ul class="nav navbar-nav ml-auto"> 
+					<li class="nav-item">
+						<a class="nav-link" href="index.html">主页</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="introduction.html">介绍</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="work.html">作品</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="contact.html">联系</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="cardcontainer">
+			<div class="poker-container container">
+				<div class="poker poker1">
+					<img src="image/photo (0).webp" />
+				</div>
+				<div class="poker poker2">
+					<img src="image/photo (1).webp" />
+				</div>
+				<div class="poker poker3">
+					<img src="image/photo (2).webp" />
+				</div>
+				<div class="poker poker4">
+					<img src="image/photo (3).webp" />
+				</div>
+				<div class="poker poker5">
+					<img src="image/photo (4).webp" />
+				</div>
+				<div class="poker poker6">
+					<img src="image/photo (5).webp" />
+				</div>
+
+			</div>
+			<div class="poker-top" onclick="poker.move()"></div>
+		</div>
+		<div class="cardcontainer">
+			<div class="poker-container container">
+				<!-- 扑克牌 -->
+			</div>
+			<div class="poker-top" onclick="poker.move()"></div>
+			<!-- 添加按钮 -->
+			<div class="text-center">
+				<a href="detail.html" class="btn btn-primary"
+					style="background-image: linear-gradient(to right, rgb(31, 210, 254), rgb(25, 245, 200)); border-radius: 20px; border: none; padding: 10px 20px; font-size: 18px;">
+					<span style="color: white;">点击了解更多</span>
+				</a>
+			</div>
+
+
+
+
+			<script>
+				const poker = {
+					imgs: [],
+					img_index: 0,
+					poker_eles: {},
+					transform_datas: [
+						"rotate(-10deg)",
+						"rotate(-6deg) translate(35%, -12%)",
+						"rotate(-2deg) translate(65%, -19%)",
+						"rotate(2deg) translate(95%, -26%)",
+						"rotate(6deg) translate(125%, -23%)",
+						"rotate(10deg) translate(155%, -19%)",
+					],
+					init() {
+						for (let i = 0; i < 10; i++) { // 图片张数为10
+							let img = new Image();
+							img.src = `image/photo (${i}).webp`;
+							this.imgs.push(img);
+						}
+						this.poker_eles = [...document.getElementsByClassName("poker")];
+						this.poker_eles.forEach((obj, index) => {
+							obj.nums = index;
+						});
+
+						this.img_index = this.poker_eles.length;
+					},
+					move() {
+						this.poker_eles.map((ele) => {
+							let nums = ele.nums;
+							if (nums + 1 >= this.poker_eles.length) {
+								nums = 0;
+								ele.style.transition = "";
+								ele.querySelector("img").src =
+									this.imgs[this.img_index].src;
+								this.img_index++;
+								if (this.img_index >= this.imgs.length)
+									this.img_index = 0;
+							} else {
+								nums += 1;
+								ele.style.transition = "transform 0.3s ease";
+							}
+							ele.style.zIndex = nums;
+							ele.style.transform = this.transform_datas[nums];
+							ele.nums = nums;
+
+							if (nums === this.poker_eles.length - 1) {
+								ele.classList.add('no-color-change');
+							} else {
+								ele.classList.remove('no-color-change');
+							}
+						});
+					},
+				};
+				poker.init();
+			</script>
+
+
+
+	</body>
+
+</html>
