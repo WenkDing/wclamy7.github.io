@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>他们和未来</title>
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 80%;
+      margin: 20px auto;
+    }
+
+    .story-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .image-container {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .text-container {
+      flex: 2;
+      padding: 10px;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* 用于指示左图右文或右图左文的类 */
+    .left-image .image-container {
+      order: 1;
+    }
+
+    .left-image .text-container {
+      order: 2;
+    }
+
+    .right-image .image-container {
+      order: 2;
+    }
+
+    .right-image .text-container {
+      order: 1;
+    }
+
+
+    body {
+        margin: 0;
+        padding: 0;
+        /*overflow: hidden;*/
+        background: url("img/bg.jpg") repeat center center fixed;
+    }
+
+    /* 更新 .swiper-slide 样式 */
+    .swiper-slide {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 90vw;
+        padding-top: 10px; /* 上内边距 */
+
+  }
+
+
+    /* 更新图片样式 */
+    .swiper-slide img {
+        max-width: 80%;
+        max-height: 80%;
+         box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+
+
+    /* 更新文字样式 */
+    .swiper-slide p {
+        margin-top: 10px;
+        font-family: SimSun, serif;
+        text-align: center;
+        font-size: 30px;
+        color: rgb(200, 130, 100);
+        font-weight: bold;
+
+    }
+
+    /* 更新 .swiper-container 样式 */
+    .swiper-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        width: 100%;
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*竖向故事线*/
+    #storySection{
+      padding: 300px 110px;
+    }
+    .story-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 100px;
+    }
+
+    /* 图片和文本容器基础样式 */
+    .image-container, .text-container {
+      flex: 1;
+      padding: 10px;
+    }
+
+    /* 图片样式 */
+    .image-container {
+      flex: 0 1 auto; /* 允许图片容器根据内容大小自动调整 */
+      padding: 10px;
+      text-align: center;
+      max-width: 45%; /* 图片容器最大宽度为网页宽度的一半 */
+      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+
+    .image-container img {
+  max-width: 100%; /* 图片最大宽度为容器宽度 */
+  height: auto; /* 图片高度自适应 */
+  object-fit: cover; /* 图片内容覆盖整个容器，保持宽高比 */
+  transition: transform 0.3s ease; /* 添加过渡效果，平滑改变图片大小 */
+}
+
+.image-container img:hover {
+  transform: scale(1.1); /* 当鼠标悬停时，放大图片到原始大小的1.1倍 */
+}
+
+
+
+
+    /* 文字容器样式 */
+    .text-container-left, .text-container-right {
+      flex: 1;
+      padding: 40px;
+      text-align: left; /* 默认文本左对齐 */
+      font-family: SimSun, serif;
+      color: rgb(200, 130, 100);
+
+    }
+    /* 文本容器左对齐 */
+    .text-container-left {
+      text-align: left;
+    }
+
+    /* 文本容器右对齐 */
+    .text-container-right {
+      text-align: right;
+    }
+
+    /* 左图右文 */
+    .left-image .image-container {
+      order: 1;
+    }
+
+    .left-image .text-container-left {
+      order: 2;
+    }
+
+    /* 右图左文 */
+    .right-image .image-container {
+      order: 2;
+    }
+
+    .right-image .text-container-right {
+      order: 1;
+    }
+    @media (max-width: 768px) {
+      .image-container {
+        max-width: 100%; /* 在小屏幕上，图片容器宽度设为100% */
+      }
+    }
+
+
+    h2{
+   font-size: 30px;
+   margin-bottom: 20px; /* 在标题下方添加20像素的间距 */
+ }
+
+ p{
+font-size: 20px;
+ margin-bottom: 30px;
+}
+
+
+    /*导航栏*/
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgb(200, 130, 100);
+      padding: 22px; /* 内边距 */
+      font-family: SimSun, serif;
+      font-weight: bold;
+      width: 100%;
+      position: fixed; /* 固定在顶部 */
+      top: 0;
+      left: 0;
+      z-index: 1000; /* 确保导航栏在页面其他内容的上方 */
+    }
+    .nav-link {
+        color: white; /* 链接文字颜色为白色 */
+        text-decoration: none;
+        margin-right: 10px; /* 链接之间的间距 */
+    }
+
+    .navbar-right ul {
+        display: flex; /* 确保列表项水平排列 */
+        align-items: center; /* 垂直居中列表项 */
+        list-style: none; /* 移除列表标记 */
+        padding: 0; /* 移除默认的内边距 */
+    }
+
+    /* 设置 .navbar-left 中的 span 文字颜色为白色，并增大其字体大小 */
+    .navbar-left span {
+        color: white;
+        font-size: 20px; /* 假设你想要设置的大小是20像素 */
+    }
+
+
+    /* 加载 */
+    .loader-container {
+      /* 加载动画容器的默认样式（隐藏） */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none; /* 防止用户与加载动画交互 */
+
+    }
+
+    .loader-container.active-up {
+      /* 加载动画容器的激活样式（向上弹出） */
+      opacity: 1;
+      transform: translate(0); /* 向上移动100%自身高度，实现弹出效果 */
+    }
+
+    .loader-container.active-down {
+      /* 加载动画容器的缩回样式（向下缩回） */
+      opacity: 0;
+      transform: translateY(100%); /* 向下移动100%自身高度，实现缩回效果 */
+      transition: opacity 0.5s ease, transform 0.5s ease; /* 保持过渡效果 */
+    }
+    .loader-gif {
+      /* GIF动画图片的样式 */
+      max-width: 200px;
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+  <div class="loader-container" id="loaderContainer">
+  <img class="loader-gif" src="1.gif" alt="Loading...">
+</div>
+
+
+  <nav class="navbar">
+    <div class="navbar-left">
+      <span>他们和未来</span>
+    </div>
+    <div class="navbar-right">
+      <ul>
+        <li><a class="nav-link" href="index.html">首页</a></li>
+        <li><a class="nav-link" href="time.html">时代</a></li>
+        <li><a class="nav-link" href="study.html">学习</a></li>
+        <li><a class="nav-link" href="life.html">生活</a></li>
+        <li><a class="nav-link" href="future.html">未来</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <p>透过三十载光影的轮廓，他们的现在是什么样呢</p>
+        <br><p>滑动见证他们的成长与收获</p>
+      </div>
+
+      <div class="swiper-slide"  >
+        <img src="img/hpy.jpg" alt="Image 1">
+      </div>
+      <div class="swiper-slide">
+        <p>岁月一直在流淌<br>但真情永驻<br>友谊会跨过时间的长河凝住青春的美好<br>延续动人的情感</p>
+      </div>
+      <div class="swiper-slide"  >
+        <img src="img/ns.JPG" alt="Image 2">
+        </div>
+      <div class="swiper-slide">
+        <p>“姐妹一声大过天”<br>毕业那天的热泪盈眶如今念起依然感动依然热烈<br>如今再度相拥在一起时<br>还一如从前的模样</p>
+      </div>
+      <div class="swiper-slide" >
+        <img src="img/nsss.JPG" alt="Image 3">
+      </div>
+      <div class="swiper-slide">
+        <p>“嘿，睡在我下铺的兄弟，近来还好嘛”<br>那些年我们说要一起仗剑走天涯<br>如今阔别数年<br>我想和你说再忙也要注意身体</p>
+      </div>
+      <div class="swiper-slide" >
+        <img src="img/dhz.JPG" alt="Image 4">
+            </div>
+      <div class="swiper-slide">
+        <p>从前的照片里是你青涩的面庞害羞的笑<br>如今你有了更多元的社会角色<br>褪去了从前的稚气<br>也多了几分沉稳和儒雅<br>但不变的是无论过了多久<br>你仍是我的最佳损友</p>
+      </div>
+      <div class="swiper-slide" >
+        <img src="img/2024.jpg" alt="Image 5">
+      </div>
+      <div class="swiper-slide">
+        <p>聚是一团火<br>散是满天星<br>我们奔赴山山而川<br>迎接各自的人生海海<br>而“广告”始终是我们共同的底色<br>我们因广告而重逢<br>细数流年，我们的故事还在继续进行......</p>
+        <br><p>向下滑动，去看看我们的现在</p>
+      </div>
+    </div>
+  </div>
+  <div id="storySection"class="container">
+    <!-- 左图右文 -->
+    <div class="story-row left-image">
+      <div class="image-container">
+        <img src="img/byz.jpg" alt="Image 1">
+        </a>
+      </div>
+      <div class="text-container-left">
+        <h2>我们毕业啦</h2>
+        <p>二十岁，走出象牙塔，去迎接真实的人生百态</p>
+      </div>
+    </div>
+    <!-- 右图左文 -->
+    <div class="story-row right-image">
+      <div class="image-container">
+        <img src="img/by10.JPG" alt="Image 2">
+        </a>
+      </div>
+      <div class="text-container-right">
+        <h2>十年再相会</h2>
+        <p>这是我们毕业的第十年，我们依然热爱广告，依然在工作岗位上实践探索着</p>
+      </div>
+    </div>
+
+    <!-- 左图右文 -->
+    <div class="story-row left-image">
+      <div class="image-container">
+        <a href="p3.html">
+        <img src="img/hb.jpg" alt="Image 1">
+        </a>
+      </div>
+      <div class="text-container-left">
+        <h2>二十年再回首</h2>
+        <p>我们在二十岁相遇，时间过了一轮又一轮，我们或许不在彼此身旁，但天涯何处不相逢</p>
+        <h3><<<请点击</h3>
+      </div>
+    </div>
+
+    <!-- 右图左文 -->
+    <div class="story-row right-image">
+      <div class="image-container">
+        <a href="p4.html">
+        <img src="img/dl.jpg" alt="Image 2">
+        </a>
+      </div>
+      <div class="text-container-right">
+        <h2>青春不散场</h2>
+        <p>我们在不同的生活轨迹里闪闪发光，在平凡的生活里反复温习幸福的余韵，也常怀童真，始终想念彼此</p>
+          <h3>请点击>>></h3>
+      </div>
+    </div>
+
+    <div style="padding: 100px; ">
+      <h2 style="text-align:center;
+  font-family: SimSun, serif;color:  rgb(200, 130, 100);">细数流金岁月，三十年春华秋实，而我们也一直心系这份珍贵的当年情</p>
+      </h2>
+
+  </div>
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+  <script>
+
+  var swiper = new Swiper('.swiper-container', {
+    loop: false,
+    direction: 'horizontal',
+    slidesPerView: 1,
+    freeMode: false,
+    mousewheel: {
+      invert: false,
+      sensitivity: 1,
+    },
+    // 其他配置...
+  });
+
+  // 监听Swiper的滚动结束事件
+  swiper.on('transitionEnd', function () {
+    // 检查是否滚动到了最后一个幻灯片
+    if (swiper.activeIndex === swiper.slides.length - 1) {
+      // 如果是，则滚动到竖向故事部分
+      var storySection = document.getElementById('storySection');
+      if (storySection) {
+        window.scrollTo({
+          top: storySection.offsetTop,
+          behavior: 'smooth'
+        });
+      }
+    }
+  });
+
+  // 监听滚动事件
+  window.addEventListener('scroll', function() {
+    var swiperContainer = document.querySelector('.swiper-container');
+    var swiperTop = swiperContainer.offsetTop;
+
+    // 检查当前滚动位置是否在Swiper容器内
+    if (window.scrollY >= swiperTop && window.scrollY < swiperTop + swiperContainer.offsetHeight) {
+      // 如果是，则更新Swiper的activeIndex
+      var slideHeight = swiper.slides[0].offsetHeight;
+      var activeIndex = Math.floor(window.scrollY / slideHeight);
+      swiper.activeIndex = activeIndex;
+    }
+  });
+
+
+
+
+  			//加载
+  			document.querySelectorAll('.nav-link').forEach(function(link) {
+  			  link.addEventListener('click', function(e) {
+  			    e.preventDefault(); // 阻止链接的默认跳转行为
+
+  			    var loaderContainer = document.querySelector('.loader-container');
+
+  			    // 显示加载动画（向上弹出）
+  			    loaderContainer.classList.add('active-up');
+
+  			    // 1秒后缩回加载动画并跳转页面
+  			    setTimeout(function() {
+  			      loaderContainer.classList.remove('active-up'); // 移除向上弹出样式
+  			      loaderContainer.classList.add('active-down'); // 添加缩回样式
+
+  			      // 当缩回动画完成后（可以监听transitionend事件或使用setTimeout来模拟），执行页面跳转
+  			      setTimeout(function() {
+  			        window.location.href = link.href; // 跳转到链接指定的URL
+  			      }, 300); // 假设缩回动画需要0.5秒，这里设置500毫秒的延迟
+  			    }, 1000); // 1秒后开始缩回动画
+  			  });
+  			});
+
+
+  </script>
+</body>
+
+</html>

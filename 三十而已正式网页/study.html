@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>他们和学习</title>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.1.29/c3.js"
+    ></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.1.29/c3.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.3/css/bootstrap-grid.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/c3/0.7.20/c3.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <style>
+
+    /* 加载 */
+    .loader-container {
+      /* 加载动画容器的默认样式（隐藏） */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none; /* 防止用户与加载动画交互 */
+
+    }
+
+    .loader-container.active-up {
+      /* 加载动画容器的激活样式（向上弹出） */
+      opacity: 1;
+      transform: translate(0); /* 向上移动100%自身高度，实现弹出效果 */
+    }
+
+    .loader-container.active-down {
+      /* 加载动画容器的缩回样式（向下缩回） */
+      opacity: 0;
+      transform: translateY(100%); /* 向下移动100%自身高度，实现缩回效果 */
+      transition: opacity 0.5s ease, transform 0.5s ease; /* 保持过渡效果 */
+    }
+    .loader-gif {
+      /* GIF动画图片的样式 */
+      max-width: 200px;
+    }
+
+
+
+
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: rgb(200, 130, 100);
+        padding: 8px;
+        font-family: SimSun, serif;
+        font-weight: bold;
+      }
+
+      .nav-link {
+        color: white;
+        text-decoration: none;
+        margin-right: 10px;
+      }
+
+      .navbar-right ul {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 0;
+      }
+
+      .navbar-left span {
+        color: white;
+        font-size: 20px;
+      }
+
+      .container {
+        margin-top: 80px;
+        margin-bottom: 0px;
+        padding: 20px;
+        background-color: rgba(245, 230, 198, 0.5);
+        font-family: SimSun, serif;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+		color: rgb(200, 130, 100);
+
+      }
+
+      p,
+      div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+      }
+
+      body {
+        background-image: url("img/bg.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+        font-family: SimSun, serif;
+      }
+
+      .emptybox {
+        width: 65rem;
+        height: 40rem;
+        border-radius: 5rem;
+        margin-bottom: 8rem;
+        font-family: sans-serif;
+        font-size: 8rem;
+        color: #f7f7f7;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .scrollbox {
+        display: flex;
+        justify-content: start;
+        align-items: start;
+        width: 100%;
+        overflow: hidden;
+        height: 100vh;
+        /* 使滚动区域占据整个视口高度 */
+        flex-shrink: 0;
+      }
+
+      .scrollbox_container {
+        display: flex;
+      }
+
+      .scrollbox_container_card {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        background-color: #f7f7f7;
+        border-radius: 5rem;
+        margin-left: 5rem;
+        flex-shrink: 0;
+        overflow: hidden;
+
+        border-radius: 10px;
+      }
+
+      .scrollbox_container_card p {
+        font-family: sans-serif;
+        font-size: 6rem;
+        color: #171717;
+        font-weight: 900;
+        text-transform: uppercase;
+        z-index: 1;
+      }
+
+      .scc_truck {
+        position: absolute;
+        bottom: 0;
+        height: 10rem;
+        /* 统一设置高度 */
+      }
+
+      .scc_city {
+        width: 100%;
+        height: 100%;
+        /* 让图标充满整个高度 */
+        opacity: 0.7;
+      }
+
+      /* 根据索引计算不同的left偏移量 */
+      .scc_truck {
+        left: calc(var(--left-offset) * (100% + 5rem));
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="loader-container" id="loaderContainer">
+    <img class="loader-gif" src="1.gif" alt="Loading...">
+  </div>
+
+
+
+
+    <nav class="navbar">
+      <div class="navbar-left">
+        <span>他们和学习</span>
+      </div>
+      <div class="navbar-right">
+        <ul>
+					<li><a class="nav-link" href="index.html">首页</a></li>
+					<li><a class="nav-link" href="time.html">时代</a></li>
+					<li><a class="nav-link" href="study.html">学习</a></li>
+					<li><a class="nav-link" href="life.html">生活</a></li>
+					<li><a class="nav-link" href="future.html">未来</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h4>  在中国广告教育的历史长河中，我们目睹了广告行业的崛起与辉煌，同时也见证了无数广告学子从青涩到成熟的蜕变。自其诞生之初，中国广告教育便踏上了不断探索和前进的征途。
+	早期，广告教育虽然起步不易，但凭借着对行业的炽热追求与坚定信念，几所先驱高校率先涉足，为广告教育的后续发展奠定了坚实的基石。随着时间的推移，这股热潮逐渐蔓延至全国，越来越多的高校纷纷设立广告学专业，为行业输送了一批又一批才华横溢的广告人才。</h5>
+      <h5>下面为广告学专业数量的变化</h4>
+      <div id="history-chart"></div>
+      <h5>下面为广告学专业等级评价的数据</h5>
+      <div id="level-chart"></div>
+      <h5>下面为广告学专业毕业的就业选择</h5>
+      <div id="employment-chart"></div>
+      <h4>
+        在这辉煌的历程中，1990级中国传媒大学广告学专业的学生们无疑是值得我们特别提及的先驱者。当我们翻开历史的篇章，目光聚焦于他们，那些泛黄的照片仿佛将我们带回了那段充满激情与梦想的青春岁月。这些照片不仅记录了他们求知的身影，更承载了他们逐梦起航的坚定与执着。如今，他们中的许多人已经成为了广告行业的中坚力量，用自己的才华与汗水谱写着辉煌的篇章。
+      </h4>
+    </div>
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+    <div class="scrollbox">
+      <div class="scrollbox_container">
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city1" src="img/1优秀作业.png" />
+          <img
+            class="scc_truck scc_truck1"
+            src="img/bike.png"
+            style="--left-offset: 0"
+          />
+        </div>
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city2" src="img/2潘婷.png" />
+          <img
+            class="scc_truck scc_truck2"
+            src="img/bike.png"
+            style="--left-offset: -1"
+          />
+        </div>
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city3" src="img/3优秀班级.png" />
+          <img
+            class="scc_truck scc_truck3"
+            src="img/bike.png"
+            style="--left-offset: -2"
+          />
+        </div>
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city4" src="img/4节拍器.png" />
+          <img
+            class="scc_truck scc_truck4"
+            src="img/bike.png"
+            style="--left-offset: -3"
+          />
+        </div>
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city5" src="img/5.报刊等.png" />
+          <img
+            class="scc_truck scc_truck5"
+            src="img/bike.png"
+            style="--left-offset: -4"
+          />
+        </div>
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city6" src="img/6考试.png" />
+          <img
+            class="scc_truck scc_truck6"
+            src="img/bike.png"
+            style="--left-offset: -5"
+          />
+        </div>
+        2
+        <div class="scrollbox_container_card">
+          <p></p>
+          <img class="scc_city scc_city7" src="img/7计划书.png" />
+          <img
+            class="scc_truck scc_truck7"
+            src="img/bike.png"
+            style="--left-offset: -6"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/d3.js" charset="utf-8"></script>
+    <script src="./js/c3.js"></script>
+    <script>
+      // 就业行业分布数据
+      var employmentData = [
+        ["广告行业", 22500],
+        ["互联网/电子商务", 21800],
+        ["贸易/进出口", 15700],
+        ["公关/市场推广/会展", 14500],
+        ["电子技术/半导体/集成电路", 12700],
+        ["酒店/旅游", 11900],
+        ["制药/生物工程", 10800],
+        ["建筑/建材/工程", 9600],
+        ["计算机软件", 9500],
+        ["快速消费品(食品、饮料、化妆品)", 9500],
+      ];
+
+      // 高校开设广告学专业历史数据
+      var historyData = [
+        ["1983", 1],
+        ["1989", 2],
+        ["1992", 6],
+        ["2003", 210],
+        ["2004", 111],
+        ["2008", 231],
+        ["2013", 412],
+      ];
+
+      // 创建就业行业分布图表
+      var employmentChart = c3.generate({
+        bindto: "#employment-chart",
+        data: {
+          columns: employmentData,
+          type: "pie",
+        },
+        pie: {
+          label: {
+            format: function (value, ratio, id) {
+              return id + ": " + value;
+            },
+          },
+        },
+        legend: {
+          position: "right",
+        },
+      });
+
+      // 创建高校开设广告学专业历史图表
+      var historyChart = c3.generate({
+        bindto: "#history-chart",
+        data: {
+          x: "x",
+          columns: [
+            ["x", "1983", "1989", "1992", "2003", "2004", "2008", "2013"],
+            ["开设专业数量"].concat(
+              historyData.map(function (item) {
+                return item[1];
+              })
+            ),
+          ],
+          type: "line",
+          colors: {
+            开设专业数量: "#ff7d3c", // 这里设置线条颜色为红色
+          },
+        },
+        axis: {
+          x: {
+            type: "category",
+          },
+        },
+        legend: {
+          show: false,
+        },
+      });
+    </script>
+    <script>
+      // 开设广告专业等级占比数据
+      var levelData = [
+        ["a+", 6],
+        ["a", 26],
+        ["b+", 33],
+        ["b", 101],
+      ];
+
+      // 创建开设广告专业等级占比图表
+      var levelChart = c3.generate({
+        bindto: "#level-chart",
+        data: {
+          columns: levelData,
+          type: "bar",
+          colors: {
+            "a+": "#f9eab4", // 自定义颜色
+            a: "#ffd289",
+            "b+": "#ffa940",
+            b: "#dc863b",
+          },
+        },
+        bar: {
+          width: {
+            ratio: 0.8, // 设置柱形宽度比例
+          },
+        },
+        axis: {
+          x: {
+            type: "category",
+            categories: ["a+", "a", "b+", "b"],
+          },
+          y: {
+            label: {
+              text: "学校数量",
+              position: "outer-middle",
+            },
+          },
+        },
+      });
+    </script>
+    <script>
+      // JavaScript代码优化
+      const scrollbox = {
+        // 容器元素
+        container: document.querySelector(".scrollbox_container"),
+        // 卡片元素
+        cards: [...document.querySelectorAll(".scrollbox_container_card")],
+        // 卡车元素
+        trucks: [...document.querySelectorAll(".scc_truck")],
+        // 触发距离
+        trigger_distance: 0,
+        // 边框距离
+        border_distance: 0,
+        // 距离
+        distance: 0,
+        // 调整大小
+        resize() {
+          // 获取滚动框元素
+          let _scrollbox = document.querySelector(".scrollbox");
+          // 设置滚动框的高度
+          _scrollbox.style.height = `${this.container.offsetWidth}px`;
+          // 触发距离
+          this.trigger_distance = _scrollbox.offsetTop;
+          // 边框距离
+          this.border_distance =
+            _scrollbox.offsetTop + _scrollbox.offsetHeight - innerHeight;
+        },
+        // 移动
+        move() {
+          // 判断滚动Y值是否在触发距离和边框距离之间
+          console.log(scrollY, this.trigger_distance, this.border_distance);
+          if (
+            scrollY >= this.trigger_distance &&
+            scrollY <= this.border_distance
+          ) {
+            console.log("触发");
+            // 设置距离
+            this.distance = scrollY - this.trigger_distance;
+            // 设置容器元素的位置
+            this.container.style.transform = `translateY(${this.distance}px)`;
+            // 计算距离X
+            let distance_x =
+              (this.distance / (this.border_distance - this.trigger_distance)) *
+              (this.container.offsetWidth - innerWidth);
+            // 遍历卡片元素，设置位置
+            for (let i = 0; i < this.cards.length; i++) {
+              this.cards[i].style.transform = `translateX(${-distance_x}px)`;
+              this.trucks[i].style.transform = `translateX(${
+                distance_x * 1.1
+              }px)`;
+            }
+          }
+        },
+      };
+      // 调整大小
+      scrollbox.resize();
+      // 监听窗口调整大小
+      window.addEventListener("resize", () => {
+        scrollbox.resize();
+      });
+      // 监听滚动事件
+      window.addEventListener("scroll", () => {
+        scrollbox.move();
+      });
+      // 触发滚动事件
+      // window.dispatchEvent(new Event("scroll"));
+
+
+      //加载
+      document.querySelectorAll('.nav-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+          e.preventDefault(); // 阻止链接的默认跳转行为
+
+          var loaderContainer = document.querySelector('.loader-container');
+
+          // 显示加载动画（向上弹出）
+          loaderContainer.classList.add('active-up');
+
+          // 1秒后缩回加载动画并跳转页面
+          setTimeout(function() {
+            loaderContainer.classList.remove('active-up'); // 移除向上弹出样式
+            loaderContainer.classList.add('active-down'); // 添加缩回样式
+
+            // 当缩回动画完成后（可以监听transitionend事件或使用setTimeout来模拟），执行页面跳转
+            setTimeout(function() {
+              window.location.href = link.href; // 跳转到链接指定的URL
+            }, 300); // 假设缩回动画需要0.5秒，这里设置500毫秒的延迟
+          }, 1000); // 1秒后开始缩回动画
+        });
+      });
+
+
+
+
+
+    </script>
+  </body>
+</html>

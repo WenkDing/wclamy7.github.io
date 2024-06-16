@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>“ 三十而已 ”</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body, h1, h2, h3, h4, h5, h6, p, div, /* ...以及其他所有您希望应用样式的元素 */ {
+           font-family: "SimSun", "宋体", serif; /* 首选宋体，如果不可用则使用其他备选字体 */
+       }
+
+        #app {
+            height: 100%;
+            width: 100%;
+        }
+
+        .video {
+            height: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .video .video-inner {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .video .progress {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .progress .progress-inner {
+            margin-bottom: 3rem;
+            margin-right: 5rem;
+            margin-left: 5rem;
+        }
+
+        .progress .progress-inner .progress-bar {
+            position: relative;
+            width: 100%;
+            height: .25rem;
+            background: #fff;
+        }
+
+        .progress .progress-inner .progress-bar .progress-pointer {
+            position: absolute;
+            left: 0;
+            width: 0;
+            bottom: 0;
+            height: 100%;
+            background-color: sienna;
+            transition: width ease-in 100ms;
+        }
+
+        .progress .progress-inner .progress-bar .progress-pointer::after {
+            content: '';
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(50%, -65%) rotate(0deg);
+            background: no-repeat url(img/brownbick.png) center center;
+            background-size: contain;
+            width: 23vw;
+            height: 10vw;
+        }
+
+        .video .audio {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+		#AnNiu{
+			/* border: 1px solid red; */
+			position:absolute;
+			top:500px;
+			left:700px;
+
+		}
+		#AnNiu a{
+			display:inline-block;
+			color:white;
+			font-size:30px;
+			font-weight:600;
+			width:150px;
+			height:50px;
+			text-align: center;
+			line-height:50px;
+			text-decoration: none;
+			box-shadow: 0px 0px 10px 5px rgba(0,0,0,0.5);
+      font-family: "SimSun", "宋体", serif;
+       border-radius: 10px; /* 设置圆角 */
+		}
+		#AnNiu a:hover{
+			color: rgb(200, 130, 100);
+       font-family: "SimSun", "宋体", serif;
+		}
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="video">
+        <video class="video-inner" id="video" autoplay loop muted>
+            <source src="回忆录.mp4" type="video/mp4">
+                <h3 onclick="window.location.href='study.html';">Education experience<br><br>(click me)</h3>
+              <button type="button">点击穿越</button>
+        </video>
+
+        <div class="progress">
+            <div class="progress-inner">
+                <div class="progress-bar">
+                    <div class="progress-pointer" id="progress"></div>
+                </div>
+            </div>
+        </div>
+        <audio class="audio" controls autoplay loop>
+            <source src="回忆录.mp3" type="audio/mpeg">
+        </audio>
+		<div id="AnNiu">
+			<a href="index.html">点击开始</a>
+		</div>
+    </div>
+</div>
+<script type="text/javascript">
+    'use strict';
+    const video = document.getElementById('video');
+    const progress = document.getElementById('progress');
+    video.addEventListener('timeupdate', function () {
+        const a = Math.floor(video.currentTime / video.duration * 100);
+        progress.style.width = a + '%';
+    }, false);
+</script>
+</body>
+</html>
